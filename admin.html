@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Dragon Gaming Store</title>
+    <meta name="description" content="Admin dashboard untuk mengelola pesanan top up game.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-inner">
+                <a href="index.html" class="navbar-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Dragon Gaming</span>
+                </a>
+                
+                <ul class="navbar-menu">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="#" class="active">Pesanan</a></li>
+                    <li><a href="#">Game</a></li>
+                    <li><a href="#">Pengaturan</a></li>
+                </ul>
+                
+                <div class="navbar-actions">
+                    <a href="index.html" class="btn btn-outline btn-sm">
+                        <i class="fas fa-home"></i> Website
+                    </a>
+                </div>
+                
+                <div class="navbar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Page -->
+    <section class="admin-page">
+        <div class="container">
+            <!-- Admin Header -->
+            <div class="admin-header">
+                <h1>Kelola Pesanan</h1>
+                <div style="display: flex; gap: 16px; align-items: center;">
+                    <span style="color: var(--text-secondary);">Selamat datang, Admin!</span>
+                    <button onclick="clearOrders()" class="btn btn-secondary btn-sm" style="padding: 8px 16px;">
+                        <i class="fas fa-trash"></i> Hapus Semua Pesanan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Orders Card -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3>Daftar Pesanan</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Cari pesanan..." onkeyup="filterOrders()">
+                    </div>
+                </div>
+
+                <!-- Order Table -->
+                <div style="overflow-x: auto;">
+                    <table class="admin-table" id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID Pesanan</th>
+                                <th>Game</th>
+                                <th>User ID</th>
+                                <th>Item</th>
+                                <th>Jumlah</th>
+                                <th>Pembayaran</th>
+                                <th>Nama Pengirim</th>
+                                <th>WhatsApp</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody">
+                            <!-- Orders will be rendered by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- No Orders Message -->
+                <div id="no-orders" style="text-align: center; padding: 40px; display: none;">
+                    <i class="fas fa-inbox" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 16px;"></i>
+                    <p style="color: var(--text-secondary);">Belum ada pesanan</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Pesanan akan muncul di sini setelah pelanggan melakukan top up</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dragon Gaming Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Render orders from LocalStorage
+        function renderOrders() {
+            const orders = getOrders();
+            const tbody = document.getElementById('orders-tbody');
+            const noOrders = document.getElementById('no-orders');
+            
+            if (!tbody) return;
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = '';
+                if (noOrders) noOrders.style.display = 'block';
+                return;
+            }
+            
+            if (noOrders) noOrders.style.display = 'none';
+            
+            tbody.innerHTML = orders.map(order => {
+                const statusClass = order.status === 'pending' ? 'pending' : 
+                                   order.status === 'sukses' ? 'success' : 'cancel';
+                const statusText = order.status === 'pending' ? 'Menunggu' : 
+                                  order.status === 'sukses' ? 'Sukses' : 'Batal';
+                
+                return `
+                    <tr>
+                        <td><span class="order-id">${order.id}</span></td>
+                        <td>${order.game}</td>
+                        <td>${order.userId}</td>
+                        <td>${order.item}</td>
+                        <td>${formatRupiah(order.jumlah)}</td>
+                        <td>${order.paymentMethod}</td>
+                        <td>${order.senderName}</td>
+                        <td>${order.whatsapp}</td>
+                        <td>${order.tanggal}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            ${order.status === 'pending' ? `
+                                <button class="action-btn approve" onclick="updateOrderStatus('${order.id}', 'sukses')">
+                                    <i class="fas fa-check"></i> Terima
+                                </button>
+                                <button class="action-btn cancel" onclick="updateOrderStatus('${order.id}', 'batal')">
+                                    <i class="fas fa-times"></i> Tolak
+                                </button>
+                            ` : '-'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Get orders from LocalStorage
+        function getOrders() {
+            const orders = localStorage.getItem('dragonGamingOrders');
+            return orders ? JSON.parse(orders) : [];
+        }
+
+        // Update order status
+        function updateOrderStatus(orderId, newStatus) {
+            const orders = getOrders();
+            const orderIndex = orders.findIndex(o => o.id === orderId);
+            
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = newStatus;
+                localStorage.setItem('dragonGamingOrders', JSON.stringify(orders));
+                renderOrders();
+                showToast('Status pesanan diperbarui!', 'success');
+            }
+        }
+
+        // Clear all orders
+        function clearOrders() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua pesanan?')) {
+                localStorage.removeItem('dragonGamingOrders');
+                renderOrders();
+                showToast('Semua pesanan telah dihapus!', 'success');
+            }
+        }
+
+        // Filter orders
+        function filterOrders() {
+            const searchText = document.getElementById('search-input').value.toLowerCase();
+            const rows = document.querySelectorAll('#orders-tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrders();
+            window.showToast = showToast;
+        });
+    </script>
+</body>
+</html>

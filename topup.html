@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Up Game - Dragon Gaming Store</title>
+    <meta name="description" content="Top up game cepat dan aman. Pengiriman instan untuk Mobile Legends, PUBG Mobile, Roblox, dan lainnya.">
+    <meta name="keywords" content="top up game, mobile legends, pubg mobile, roblox, codm, valorant">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-inner">
+                <a href="index.html" class="navbar-logo">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Dragon Gaming</span>
+                </a>
+                
+                <ul class="navbar-menu">
+                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="index.html#order">Status Pesanan</a></li>
+                    <li><a href="index.html#promo">Promo</a></li>
+                    <li><a href="index.html#help">Bantuan</a></li>
+                </ul>
+                
+                <div class="navbar-actions">
+                    <a href="admin.html" class="btn btn-outline btn-sm">
+                        <i class="fas fa-user"></i> Admin
+                    </a>
+                </div>
+                
+                <div class="navbar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Top Up Page -->
+    <section class="topup-page">
+        <div class="container">
+            <!-- Game Header -->
+            <div class="topup-header">
+                <div class="topup-game-info">
+                    <img src="/assets/images/ml.png" alt="Game" onerror="this.src='https://via.placeholder.com/60?text=Game'">
+                    <h2>Top Up Game</h2>
+                </div>
+            </div>
+
+            <!-- Form Steps -->
+            <div class="form-steps">
+                <div class="step active" data-step="0">
+                    <span class="step-number">1</span>
+                    <span>Akun</span>
+                </div>
+                <div class="step" data-step="1">
+                    <span class="step-number">2</span>
+                    <span>Paket</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-number">3</span>
+                    <span>Pembayaran</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-number">4</span>
+                    <span>Konfirmasi</span>
+                </div>
+            </div>
+
+            <!-- Top Up Form -->
+            <form class="topup-form" id="topup-form">
+                <div class="form-card">
+                    <!-- Step 1: Account Information -->
+                    <div class="form-section active" data-section="0">
+                        <h3><span class="step-icon"><i class="fas fa-user"></i></span> Informasi Akun</h3>
+                        
+                        <div class="form-group">
+                            <label>User ID <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <input type="text" id="user-id" class="form-input" placeholder="Masukkan User ID Anda" required>
+                            </div>
+                            <p class="input-hint"><i class="fas fa-info-circle"></i> Temukan User ID Anda di pengaturan profil game</p>
+                            <p class="input-error">Silakan masukkan User ID yang valid</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label id="server-label">Server ID <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <input type="text" id="server-id" class="form-input" placeholder="Masukkan Server ID" required>
+                            </div>
+                            <p class="input-hint"><i class="fas fa-info-circle"></i> Contoh: Server 1234</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Select Denomination -->
+                    <div class="form-section" data-section="1">
+                        <h3><span class="step-icon"><i class="fas fa-gem"></i></span> Pilih Paket</h3>
+                        
+                        <div class="denomination-grid">
+                            <!-- Denomination cards will be rendered by JavaScript -->
+                        </div>
+                        
+                        <!-- Order Summary -->
+                        <div class="order-summary">
+                            <h4>Ringkasan Pesanan</h4>
+                            <div class="order-summary-item">
+                                <span>Game</span>
+                                <span id="summary-game">-</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Item</span>
+                                <span id="summary-item">-</span>
+                            </div>
+                            <div class="order-summary-item order-summary-total">
+                                <span>Total</span>
+                                <span>Rp 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Payment Method -->
+                    <div class="form-section" data-section="2">
+                        <h3><span class="step-icon"><i class="fas fa-credit-card"></i></span> Pilih Metode Pembayaran</h3>
+                        
+                        <div class="payment-methods">
+                            <div class="payment-tab active" id="bank-tab">
+                                <i class="fas fa-university"></i> Transfer Bank
+                            </div>
+                            <div class="payment-tab" id="ewallet-tab">
+                                <i class="fas fa-wallet"></i> E-Wallet
+                            </div>
+                        </div>
+                        
+                        <div class="payment-options active" id="bank-options">
+                            <!-- Bank options will be rendered by JavaScript -->
+                        </div>
+                        
+                        <div class="payment-options" id="ewallet-options">
+                            <!-- E-wallet options will be rendered by JavaScript -->
+                        </div>
+                        
+                        <div class="payment-instructions">
+                            <h4><i class="fas fa-info-circle"></i> Instruksi Pembayaran</h4>
+                            <ol>
+                                <li>Pilih metode pembayaran di atas</li>
+                                <li>Salin nomor rekening dan lakukan pembayaran</li>
+                                <li>Upload bukti pembayaran di langkah berikutnya</li>
+                                <li>Tunggu konfirmasi (biasanya dalam 5 menit)</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Confirm Payment -->
+                    <div class="form-section" data-section="3">
+                        <h3><span class="step-icon"><i class="fas fa-check-circle"></i></span> Konfirmasi Pembayaran</h3>
+                        
+                        <div class="order-summary">
+                            <h4>Detail Pesanan</h4>
+                            <div class="order-summary-item">
+                                <span>Game</span>
+                                <span id="final-game">-</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>User ID</span>
+                                <span id="final-userid">-</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Item</span>
+                                <span id="final-item">-</span>
+                            </div>
+                            <div class="order-summary-item">
+                                <span>Metode Pembayaran</span>
+                                <span id="final-payment">-</span>
+                            </div>
+                            <div class="order-summary-item order-summary-total">
+                                <span>Total Pembayaran</span>
+                                <span>Rp 0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Upload Bukti Pembayaran <span class="required">*</span></label>
+                            <div class="file-upload">
+                                <input type="file" id="payment-proof" accept="image/*" required>
+                                <div class="file-upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <p>Klik untuk upload atau drag and drop</p>
+                                <p class="file-name"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nama Pengirim <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <input type="text" id="sender-name" class="form-input" placeholder="Masukkan nama Anda seperti di transfer" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nomor WhatsApp <span class="required">*</span></label>
+                            <div class="input-wrapper">
+                                <input type="tel" id="whatsapp" class="form-input" placeholder="Masukkan nomor WhatsApp Anda" required>
+                            </div>
+                            <p class="input-hint"><i class="fas fa-info-circle"></i> Kami akan menghubungi Anda di nomor ini untuk update pesanan</p>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="back-btn" style="display: none;">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </button>
+                        <button type="button" class="btn btn-primary" id="next-btn">
+                            Berikutnya <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="button" class="btn btn-accent" id="submit-btn" style="display: none;">
+                            <i class="fas fa-paper-plane"></i> Kirim Pesanan
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="navbar-logo">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Dragon Gaming</span>
+                    </a>
+                    <p>Mitra terpercaya Anda untuk top up game instan. Solusi gaming yang cepat, aman, dan terjangkau.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Link Cepat</h4>
+                    <div class="footer-links">
+                        <a href="index.html">Beranda</a>
+                        <a href="#">Status Pesanan</a>
+                        <a href="#">Promosi</a>
+                        <a href="#">Pusat Bantuan</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Game</h4>
+                    <div class="footer-links">
+                        <a href="topup.html?game=mlbb">Mobile Legends</a>
+                        <a href="topup.html?game=pubgm">PUBG Mobile</a>
+                        <a href="topup.html?game=roblox">Roblox</a>
+                        <a href="topup.html?game=codm">Call of Duty</a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Dukungan</h4>
+                    <div class="footer-links">
+                        <a href="#">Ketentuan Layanan</a>
+                        <a href="#">Kebijakan Privasi</a>
+                        <a href="#">Kebijakan Pengembalian</a>
+                        <a href="#">Hubungi Kami</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Dragon Gaming Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6281234567890" class="floating-whatsapp" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/topup.js"></script>
+</body>
+</html>
